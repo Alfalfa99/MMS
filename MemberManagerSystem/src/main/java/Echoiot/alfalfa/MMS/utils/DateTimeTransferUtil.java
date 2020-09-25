@@ -1,4 +1,4 @@
-package Echoiot.alfalfa.MMS.util;
+package Echoiot.alfalfa.MMS.utils;
 
 
 import org.springframework.stereotype.Component;

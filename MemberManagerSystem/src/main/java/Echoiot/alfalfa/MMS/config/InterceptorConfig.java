@@ -1,8 +1,11 @@
 package Echoiot.alfalfa.MMS.config;
 
+
+import Echoiot.alfalfa.MMS.interceptor.AdminInterceptor;
 import Echoiot.alfalfa.MMS.interceptor.TokenInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 /**
@@ -14,8 +17,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 public class InterceptorConfig extends WebMvcConfigurationSupport {
 
     private final TokenInterceptor tokenInterceptor;
+    private final AdminInterceptor adminInterceptor;
 
-    public InterceptorConfig(TokenInterceptor tokenInterceptor) {
+    public InterceptorConfig(AdminInterceptor adminInterceptor, TokenInterceptor tokenInterceptor) {
+        this.adminInterceptor = adminInterceptor;
         this.tokenInterceptor = tokenInterceptor;
     }
 
@@ -26,7 +31,25 @@ public class InterceptorConfig extends WebMvcConfigurationSupport {
         registry.addInterceptor(tokenInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/**/login/**", "/**/register/**", "/**/verifyCode/**")
-                .excludePathPatterns("/**/*.html", "/**/*.js", "/**/*.css");
+                .excludePathPatterns("/**/swagger-ui.html/**","/**/*.html", "/**/*.js", "/**/*.css");
+
+        //拦截前往Admin接口的所有请求，对请求进行处理
+        registry.addInterceptor(adminInterceptor).addPathPatterns("/**/admin/**").excludePathPatterns("/**/findAllUser/**");
+        //拦截前往TaskController接口的所有请求，对请求进行处理
+        registry.addInterceptor(adminInterceptor).addPathPatterns("/**/task/**");
     }
 
+    /**
+     * 打开前往swagger的接口
+     * @param registry 注册
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+        super.addResourceHandlers(registry);
+    }
 }

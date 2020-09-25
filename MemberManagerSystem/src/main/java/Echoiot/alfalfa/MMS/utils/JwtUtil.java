@@ -1,4 +1,4 @@
-package Echoiot.alfalfa.MMS.util;
+package Echoiot.alfalfa.MMS.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;

@@ -1,6 +1,7 @@
 package Echoiot.alfalfa.MMS.interceptor;
 
-import Echoiot.alfalfa.MMS.util.JwtUtil;
+
+import Echoiot.alfalfa.MMS.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;

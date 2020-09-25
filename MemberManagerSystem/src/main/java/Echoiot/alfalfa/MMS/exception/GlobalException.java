@@ -30,7 +30,6 @@ public class GlobalException {
      */
     @ExceptionHandler(value = Exception.class)
     public CommonResult<String> toHandlerException(Exception e) {
-        //开发模式下将错误信息打印到控制台便与调试
         e.printStackTrace();
         if (e instanceof MethodArgumentNotValidException) {
             //参数验证错误
@@ -47,7 +46,11 @@ public class GlobalException {
         } else if (e instanceof AccessDeniedException) {
             //用户权限不足
             return new CommonResult<>(40005, "Error", e.getMessage());
-        } else if (e instanceof BadCredentialsException) {
+        } else if (e instanceof VerifyException){
+            //验证码错误
+            return new CommonResult<>(40006, "Error", e.getMessage());
+        }
+        else if (e instanceof BadCredentialsException) {
             //Token令牌过期
             return new CommonResult<>(40010, "Error", e.getMessage());
         } else if (e instanceof InternalAuthenticationServiceException) {
@@ -63,6 +66,8 @@ public class GlobalException {
             //用户名重复
             return new CommonResult<>(40014, "ERROR", e.getMessage());
         } else {
+            //出现了不明错误,打印错误信息
+//            e.printStackTrace();
             return new CommonResult<>(50000, "Error", "你触发了一个未知错误！");
         }
     }
